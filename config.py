@@ -1,18 +1,19 @@
-# MySQL credentials (backup all databases to .sql file)
-mysql_user = "root"
-mysql_password = ""
-
-# Location for final backup
-backup_location = "/media/backup"
 # Locations to back up
 backup_dirs = ["/home"]
 
-# Should the script do a MySQL Database backup?
-mysql_backup = False
-# Should the script delete old backups?
+# Location for final backup
+backup_location = "/media/backup"
+
+# File name for final backup
+backup_name_format = "%date%_%backupName%"
+
+# Date format for file name
+date_format = "%Y-%m-%d_%H-%M"
+
+# Delete old backups?
 clear_backups = False
 
-# Format for the date in the filename
-date_format = "%Y-%m-%d_%H-%M"
-# Backup filename
-backup_name_format = "%date%_%backupName%"
+# MySQL
+mysql_backup = False
+mysql_user = "root"
+mysql_password = ""
