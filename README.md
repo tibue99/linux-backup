@@ -9,7 +9,7 @@ A script to create backups on linux systems.
 curl https://rclone.org/install.sh | sudo bash
 rclone config
 ```
-- Install screen and create new screen for mounting
+- Install screen and create new screen for [mounting](https://rclone.org/commands/rclone_mount/)
 ```shell
 apt install screen
 screen -S backup

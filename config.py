@@ -1,18 +1,18 @@
-# Credentials to connect to the MySQL database and backup all databases to a .sql file.
+# MySQL credentials (backup all databases to .sql file)
 mysql_user = "root"
-mysql_password = "securePassword"
+mysql_password = ""
 
-# Location where the backup files will be stored
-backup_location = "/media/cloud"
-# Locations to backup
-backup_dirs = ["/var/www", "/etc"]
+# Location for final backup
+backup_location = "/media/backup"
+# Locations to back up
+backup_dirs = ["/home"]
 
 # Should the script do a MySQL Database backup?
-mysql_backup = True
+mysql_backup = False
 # Should the script delete old backups?
 clear_backups = False
 
 # Format for the date in the filename
-date_format = "%Y_%m_%d-%H_%M"
+date_format = "%Y-%m-%d_%H-%M"
 # Backup filename
-backup_name_format = "%date%-%backupName%"
+backup_name_format = "%date%_%backupName%"
