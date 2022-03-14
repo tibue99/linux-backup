@@ -8,8 +8,9 @@ from logger import Logger
 date = time.strftime(config.date_format)
 logger = Logger("backup.log")
 
-# This function check if the script is running on a unix based operating system.
+
 def os_check():
+    """Check if the script is running on a unix based operating system"""
     if platform.startswith('linux') or platform == 'darwin':
         return True
     else:
@@ -18,39 +19,38 @@ def os_check():
 
 def mysql_backup():
     logger.log("INFO", "Starting backup for MySQL database...")
-    tmpCheck = os.system("cd "+config.backup_location)
-    if tmpCheck == 0:
-        mysqlBackupFileName = getFileName('mysqlBackup') + '.sql'
-        createBackup = os.system("cd " + config.backup_location + " && "
-                                 "mysqldump -u " + config.mysql_user + " -p'" + config.mysql_password + "' --all-databases > " + mysqlBackupFileName)
+    tmp_check = os.system(f"cd {config.backup_location}")
+    if tmp_check == 0:
+        mysql_backup_file_name = f"{get_file_name('mysqlBackup')}.sql"
+        create_backup = os.system(
+            f"cd {config.backup_location} && mysqldump -u {config.mysql_user} -p'{config.mysql_password}'"
+            f" --all-databases > {mysql_backup_file_name}")
 
-        if createBackup == 0:
-            logger.log("SUCCESS", "MySQL database backup successfully created")
+        if create_backup == 0:
+            logger.log("SUCCESS", "MySQL database backup created successfully")
         else:
             logger.log("ERROR", "MySQL database backup failed")
-            os.system("cd " + config.backup_location + " && rm mysqlbackup-" + date + ".sql")
+            os.system(f"cd {config.backup_location} && rm mysqlbackup-{date}.sql")
     else:
         logger.log("ERROR", "Mount not exits")
 
 
 def backup():
-    logger.log("INFO", "Starting backup for "+str(len(config.backup_dirs))+" directories...")
+    logger.log("INFO", f"Starting backup for {len(config.backup_dirs)} directories...")
     if len(config.backup_dirs) == 0:
         logger.log("INFO", "No directories to backup")
     else:
-        counter = 0
-        for dir in config.backup_dirs:
-            backupFileName = getFileName('backup_' + str(counter + 1)) + '.tar.gz'
-            counter += 1
-            logger.log("INFO", "Starting backup for "+dir+"...")
-            status = os.system("cd " + config.backup_location + " && tar -czvf " + backupFileName + " " + dir)
+        for index, folder in enumerate(config.backup_dirs):
+            backup_file_name = get_file_name(f"backup_{index + 1}.tar.gz")
+            logger.log("INFO", f"Starting backup for {folder}...")
+            status = os.system(f"cd {config.backup_location} && tar -czvf {backup_file_name} {folder}")
             if status == 0:
-                logger.log("SUCCESS", "Backup for "+dir+" successfully")
+                logger.log("SUCCESS", f"Backup for {folder} created successfully")
             else:
-                logger.log("ERROR", "Failed to backup "+dir)
+                logger.log("ERROR", f"Failed to backup {folder}")
 
 
-def clearBackups():
+def clear_backups():
     logger.log("INFO", "Cleaning backup dir...")
     for file in os.listdir(config.backup_location):
         if os.path.isfile(file):
@@ -58,30 +58,31 @@ def clearBackups():
         elif os.path.isdir(file):
             os.rmdir(file)
         else:
-            logger.log("ERROR", file + " can't be deleted!")
+            logger.log("ERROR", f"{file} can't be deleted!")
     logger.log("SUCCESS", "Successfully deleted old backup files")
 
-def getFileName(name):
-    fileName = config.backup_name_format
 
-    fileName = fileName.replace('%date%', date)
-    fileName = fileName.replace('%backupName%', name)
+def get_file_name(name):
+    file_name = config.backup_name_format
 
-    print(fileName)
+    file_name = file_name.replace('%date%', date)
+    file_name = file_name.replace('%backupName%', name)
 
-    return fileName
+    print(file_name)
+    return file_name
+
 
 if os_check():
     if os.path.exists(config.backup_location):
         if config.clear_backups:
-            clearBackups()
+            clear_backups()
         if config.mysql_backup:
             mysql_backup()
         backup()
     else:
         logger.log("ERROR", "Failed to create backup")
-        logger.log("ERROR", config.backup_location + " not exists")
-    logger.closeFile()
+        logger.log("ERROR", f"{config.backup_location} does not exist")
+    logger.close_file()
 else:
-    logger.log("ERROR", "Sorry but this script is only for Linux or macOS")
-    logger.closeFile()
+    logger.log("ERROR", "Sorry, this script is only for Linux or macOS")
+    logger.close_file()

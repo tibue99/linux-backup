@@ -1,16 +1,13 @@
 from datetime import datetime
 
+
 class Logger:
+    def __init__(self, file_name):
+        self.file = open(file_name, "a")
 
-    file = None
+    def log(self, log_level, message):
+        self.file.write(f"[{datetime.now()}] {log_level}: {message}\n")
+        print(f"\n [{datetime.now()}] {log_level}: {message}\n")
 
-    def __init__(self, fileName):
-        self.file = open(fileName, "a")
-
-    def log(self, logLevel, message):
-        now = str(datetime.now())
-        self.file.write("[" + now + "] " + logLevel + ": " + message + " \n")
-        print("\n [" + now + "] " + logLevel + ": " + message + " \n")
-
-    def closeFile(self):
+    def close_file(self):
         self.file.close()
