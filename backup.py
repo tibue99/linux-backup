@@ -40,10 +40,16 @@ def backup():
     if len(config.backup_dirs) == 0:
         logger.log("INFO", "No directories to backup")
     else:
+        exclude_str = ""
+        for file in config.exclude:
+            exclude_str += f"--exclude '{file}' "
+
         for index, folder in enumerate(config.backup_dirs):
-            backup_file_name = get_file_name(f"backup_{index + 1}.tar.gz")
+            backup_file_name = get_file_name(f"backup{index + 1}.tar.gz")
             logger.log("INFO", f"Starting backup for {folder}...")
-            status = os.system(f"cd {config.backup_location} && tar -czvf {backup_file_name} {folder}")
+            status = os.system(
+                f"cd {config.backup_location} && tar {exclude_str} -czvf {backup_file_name} {folder}"
+            )
             if status == 0:
                 logger.log("SUCCESS", f"Backup for {folder} created successfully")
             else:
@@ -64,10 +70,8 @@ def clear_backups():
 
 def get_file_name(name):
     file_name = config.backup_name_format
-
     file_name = file_name.replace('%date%', date)
     file_name = file_name.replace('%backupName%', name)
-
     print(file_name)
     return file_name
 

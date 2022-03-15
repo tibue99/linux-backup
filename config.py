@@ -1,6 +1,9 @@
 # Locations to back up
 backup_dirs = ["/home"]
 
+# Exclude files or directories from backup
+exclude = ["__pycache__", "venv"]
+
 # Location for final backup
 backup_location = "/media/backup"
 

@@ -34,6 +34,9 @@ Set a cronjob to backup periodically. This [cronjob](https://crontab.guru/#0_3_*
 ```shell
 crontab -e
 0 3 * * * python3 /path/to/backup.py
+
+# View cronjobs
+crontab -l
 ```
 
 ## Credits
