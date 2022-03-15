@@ -8,7 +8,7 @@ exclude = ["__pycache__", "venv"]
 backup_location = "/media/backup"
 
 # File name for final backup
-backup_name_format = "%date%_%backupName%"
+backup_name_format = "%date%_%backup_name%"
 
 # Date format for file name
 date_format = "%Y-%m-%d_%H-%M"

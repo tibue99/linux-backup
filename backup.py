@@ -21,16 +21,16 @@ def mysql_backup():
     logger.log("INFO", "Starting backup for MySQL database...")
     tmp_check = os.system(f"cd {config.backup_location}")
     if tmp_check == 0:
-        mysql_backup_file_name = f"{get_file_name('mysqlBackup')}.sql"
+        mysql_backup_file_name = f"{get_file_name('mysql_backup')}.sql"
         create_backup = os.system(
-            f"cd {config.backup_location} && mysqldump -u {config.mysql_user} -p'{config.mysql_password}'"
-            f" --all-databases > {mysql_backup_file_name}")
-
+            f"cd {config.backup_location} && mysqldump -u {config.mysql_user} -p '{config.mysql_password}'"
+            f" --all-databases > {mysql_backup_file_name}"
+        )
         if create_backup == 0:
             logger.log("SUCCESS", "MySQL database backup created successfully")
         else:
             logger.log("ERROR", "MySQL database backup failed")
-            os.system(f"cd {config.backup_location} && rm mysqlbackup-{date}.sql")
+            os.system(f"cd {config.backup_location} && rm {mysql_backup_file_name}")
     else:
         logger.log("ERROR", "Mount not exits")
 
@@ -71,8 +71,8 @@ def clear_backups():
 def get_file_name(name):
     file_name = config.backup_name_format
     file_name = file_name.replace('%date%', date)
-    file_name = file_name.replace('%backupName%', name)
-    print(file_name)
+    file_name = file_name.replace('%backup_name%', name)
+    logger.log("INFO", f"Name for backup file: {file_name}")
     return file_name
 
 
@@ -86,7 +86,7 @@ if os_check():
     else:
         logger.log("ERROR", "Failed to create backup")
         logger.log("ERROR", f"{config.backup_location} does not exist")
-    logger.close_file()
 else:
     logger.log("ERROR", "Sorry, this script is only for Linux or macOS")
-    logger.close_file()
+
+logger.close_file()
