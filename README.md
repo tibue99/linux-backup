@@ -9,11 +9,13 @@ A script to create backups on linux systems.
 curl https://rclone.org/install.sh | sudo bash
 rclone config
 ```
-- Install screen and create new screen for [mounting](https://rclone.org/commands/rclone_mount/)
+- Install tmux and create new session for [mounting](https://rclone.org/commands/rclone_mount/)
 ```shell
-apt install screen
-screen -S backup
-rcloune mount Name: /path/to/folder --vfs-cache-mode writes
+apt install tmux
+tmux new -s backup
+rcloune mount <name>: /path/to/empty/folder --vfs-cache-mode writes
+
+# <name> is the name you chose for the remote in the rclone config
 ```
 - Clone this repository and edit `config.py`
 ```shell
